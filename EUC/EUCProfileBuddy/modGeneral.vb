@@ -6,8 +6,9 @@ Module modGeneral
         iconNotify.Visible = True
         iconNotify.BalloonTipIcon = ToolTipIcon.Info
         iconNotify.BalloonTipTitle = userName + " (" + userProfileDirectory + ")"
-        iconNotify.BalloonTipText = balloonTipTitle + ": " + balloonTipText
+        iconNotify.BalloonTipText = balloonTipText
         iconNotify.ShowBalloonTip(baloonTipTimeout)
+        iconNotify.Text = "EUC Profile Buddy: " & userName & " (" & userProfileDirectory & ")"
         currentForm.ShowInTaskbar = False
 
     End Sub
@@ -51,6 +52,18 @@ Module modGeneral
     Sub DisplayErrorBox(messageText As String)
 
         MsgBox(messageText, vbOKOnly + vbCritical, AppTitle)
+
+    End Sub
+
+    Sub SetMouseBusy()
+
+        Cursor.Current = Cursors.WaitCursor
+
+    End Sub
+
+    Sub SetMouseNotBusy()
+
+        Cursor.Current = Cursors.Default
 
     End Sub
 

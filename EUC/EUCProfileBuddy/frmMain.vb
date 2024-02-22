@@ -1,40 +1,59 @@
-﻿Imports EUCProfileBuddy.modRegistry
+﻿
+Imports System.IO
+Imports System.Windows.Forms.VisualStyles.VisualStyleElement
+Imports System.Xml
 
 Public Class frmMain
     Private Sub frmMain_Resize(sender As Object, e As EventArgs) Handles Me.Resize
 
         If Me.WindowState = FormWindowState.Minimized Then
-            modGeneral.MinimizeApplication(icnNotify, Me)
+            MinimizeApplication(icnNotify, Me)
         End If
 
     End Sub
 
     Private Sub icnNotify_DoubleClick(sender As Object, e As EventArgs) Handles icnNotify.DoubleClick
 
-        modGeneral.MaximizeApplication(icnNotify, Me)
+        MaximizeApplication(icnNotify, Me)
 
     End Sub
 
     Private Sub frmMain_Load(sender As Object, e As EventArgs) Handles Me.Load
 
-
         LoadProfileData()
 
-        'Me.WindowState = FormWindowState.Minimized
+        Dim profileDirectories As New Dictionary(Of String, Long)
+        profileDirectories = LoadProfileSizing(userProfileDirectory)
+        Me.lblLastFolder.Text = userProfileDirectory
+        Dim profileDirectoriesSorted = (From entry In profileDirectories Order By entry.Value Descending Select entry)
+        Dim i As Integer = 0
+        For Each subFolder In profileDirectoriesSorted
+            dgFolders.Rows.Add(profileDirectoriesSorted(i).Key, profileDirectoriesSorted(i).Value)
+            i = i + 1
+        Next
+        For x As Integer = 0 To dgFolders.ColumnCount - 1
+            dgFolders.Columns(x).AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+        Next
+
+        Me.Location = New Point(Screen.PrimaryScreen.WorkingArea.Width - Me.Width, Screen.PrimaryScreen.WorkingArea.Height - Me.Height)
 
     End Sub
 
     Private Sub ctxMenuExit_Click(sender As Object, e As EventArgs) Handles ctxMenuExit.Click
 
-        modGeneral.ExitApplication()
+        ExitApplication()
 
     End Sub
 
     Private Sub LoadProfileData()
 
+        ' Set the mouse cursor
+        SetMouseBusy()
+
         ' Get the User Profile Data
         userProfileDirectory = ReadVolatileEnvironment("USERPROFILE")
         appdataLocal = ReadVolatileEnvironment("LOCALAPPDATA")
+        appdataRoaming = ReadVolatileEnvironment("APPDATA")
         Dim profileSize As String = Math.Round(GetProfileSize(userProfileDirectory, True) / (1024 * 1024 * 1024), 2) & " GB"
 
         ' Load the User Profile Data
@@ -42,30 +61,34 @@ Public Class frmMain
         Me.lblProfileDirectory.Text = userProfileDirectory
         Me.lblProfileSize.Text = profileSize
         Me.lblAppDataLocal.Text = appdataLocal
+        Me.lblAppdataRoaming.Text = appdataRoaming
+
+        ' Set the mouse cursor
+        SetMouseNotBusy()
 
     End Sub
 
-    Private Sub btnRefreshProfileSize_Click(sender As Object, e As EventArgs) Handles btnRefreshProfileSize.Click
+    Private Sub btnRefreshProfileSize_Click(sender As Object, e As EventArgs)
 
         LoadProfileData()
 
     End Sub
 
-    Private Sub EdgeProfileToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles EdgeProfileToolStripMenuItem.Click
+    Private Sub btnExit_Click(sender As Object, e As EventArgs) Handles btnExit.Click
 
-        ResetMicrosoftEdge(appdataLocal)
-
-    End Sub
-
-    Private Sub mnuExit_Click(sender As Object, e As EventArgs) Handles mnuExit.Click
-
-        modGeneral.ExitApplication()
+        ExitApplication()
 
     End Sub
 
-    Private Sub resetEdge_Click(sender As Object, e As EventArgs) Handles resetEdge.Click
+    Private Sub btnMinimize_Click(sender As Object, e As EventArgs) Handles btnMinimize.Click
 
-        ResetMicrosoftEdge(appdataLocal)
+        Me.WindowState = FormWindowState.Minimized
+
+    End Sub
+
+    Private Sub btnClearTempFiles_Click(sender As Object, e As EventArgs) Handles btnClearTempFiles.Click
+
+        ClearTemporaryFiles(appdataLocal)
 
     End Sub
 
@@ -75,9 +98,40 @@ Public Class frmMain
 
     End Sub
 
-    Private Sub btnClearTempFiles_Click(sender As Object, e As EventArgs) Handles btnClearTempFiles.Click
 
-        ResetTemporaryFiles(appdataLocal)
+    Private Sub dgFolders_DoubleClick(sender As Object, e As EventArgs) Handles dgFolders.DoubleClick
 
+        Dim selectedFolder As String = (dgFolders.Item("colFolder", 0).Value.ToString)
+        lblLastFolder.Text = selectedFolder
+        Dim profileDirectories As New Dictionary(Of String, Long)
+        profileDirectories = LoadProfileSizing(selectedFolder)
+        Dim profileDirectoriesSorted = (From entry In profileDirectories Order By entry.Value Descending Select entry)
+        Dim i As Integer = 0
+        dgFolders.Rows.Clear()
+        For Each subFolder In profileDirectoriesSorted
+            dgFolders.Rows.Add(profileDirectoriesSorted(i).Key, profileDirectoriesSorted(i).Value)
+            i = i + 1
+        Next
+        For x As Integer = 0 To dgFolders.ColumnCount - 1
+            dgFolders.Columns(x).AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+        Next
+
+    End Sub
+
+    Private Sub lblLastFolder_Click(sender As Object, e As EventArgs) Handles lblLastFolder.Click
+        Dim selectedFolder As String = Me.lblLastFolder.Text
+        Me.lblLastFolder.Text = selectedFolder
+        Dim profileDirectories As New Dictionary(Of String, Long)
+        profileDirectories = LoadProfileSizing(selectedFolder)
+        Dim profileDirectoriesSorted = (From entry In profileDirectories Order By entry.Value Descending Select entry)
+        Dim i As Integer = 0
+        dgFolders.Rows.Clear()
+        For Each subFolder In profileDirectoriesSorted
+            dgFolders.Rows.Add(profileDirectoriesSorted(i).Key, profileDirectoriesSorted(i).Value)
+            i = i + 1
+        Next
+        For x As Integer = 0 To dgFolders.ColumnCount - 1
+            dgFolders.Columns(x).AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+        Next
     End Sub
 End Class
