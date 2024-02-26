@@ -20,20 +20,10 @@ Public Class frmMain
 
     Private Sub frmMain_Load(sender As Object, e As EventArgs) Handles Me.Load
 
+        SetMouseBusy()
         LoadProfileData()
-
-        Dim profileDirectories As New Dictionary(Of String, Long)
-        profileDirectories = LoadProfileSizing(userProfileDirectory)
-        Me.lblLastFolder.Text = userProfileDirectory
-        Dim profileDirectoriesSorted = (From entry In profileDirectories Order By entry.Value Descending Select entry)
-        Dim i As Integer = 0
-        For Each subFolder In profileDirectoriesSorted
-            dgFolders.Rows.Add(profileDirectoriesSorted(i).Key, profileDirectoriesSorted(i).Value)
-            i = i + 1
-        Next
-        For x As Integer = 0 To dgFolders.ColumnCount - 1
-            dgFolders.Columns(x).AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
-        Next
+        LoadFolderGrid(userProfileDirectory)
+        SetMouseNotBusy()
 
         Me.Location = New Point(Screen.PrimaryScreen.WorkingArea.Width - Me.Width, Screen.PrimaryScreen.WorkingArea.Height - Me.Height)
 
@@ -45,35 +35,6 @@ Public Class frmMain
 
     End Sub
 
-    Private Sub LoadProfileData()
-
-        ' Set the mouse cursor
-        SetMouseBusy()
-
-        ' Get the User Profile Data
-        userProfileDirectory = ReadVolatileEnvironment("USERPROFILE")
-        appdataLocal = ReadVolatileEnvironment("LOCALAPPDATA")
-        appdataRoaming = ReadVolatileEnvironment("APPDATA")
-        Dim profileSize As String = Math.Round(GetProfileSize(userProfileDirectory, True) / (1024 * 1024 * 1024), 2) & " GB"
-
-        ' Load the User Profile Data
-        Me.lblUserName.Text = userName
-        Me.lblProfileDirectory.Text = userProfileDirectory
-        Me.lblProfileSize.Text = profileSize
-        Me.lblAppDataLocal.Text = appdataLocal
-        Me.lblAppdataRoaming.Text = appdataRoaming
-
-        ' Set the mouse cursor
-        SetMouseNotBusy()
-
-    End Sub
-
-    Private Sub btnRefreshProfileSize_Click(sender As Object, e As EventArgs)
-
-        LoadProfileData()
-
-    End Sub
-
     Private Sub btnExit_Click(sender As Object, e As EventArgs) Handles btnExit.Click
 
         ExitApplication()
@@ -82,56 +43,69 @@ Public Class frmMain
 
     Private Sub btnMinimize_Click(sender As Object, e As EventArgs) Handles btnMinimize.Click
 
-        Me.WindowState = FormWindowState.Minimized
+        WindowState = FormWindowState.Minimized
 
     End Sub
-
-    Private Sub btnClearTempFiles_Click(sender As Object, e As EventArgs) Handles btnClearTempFiles.Click
-
-        ClearTemporaryFiles(appdataLocal)
-
-    End Sub
-
-    Private Sub btnResetEdge_Click(sender As Object, e As EventArgs) Handles btnResetEdge.Click
-
-        ResetMicrosoftEdge(appdataLocal)
-
-    End Sub
-
 
     Private Sub dgFolders_DoubleClick(sender As Object, e As EventArgs) Handles dgFolders.DoubleClick
 
-        Dim selectedFolder As String = (dgFolders.Item("colFolder", 0).Value.ToString)
-        lblLastFolder.Text = selectedFolder
-        Dim profileDirectories As New Dictionary(Of String, Long)
-        profileDirectories = LoadProfileSizing(selectedFolder)
-        Dim profileDirectoriesSorted = (From entry In profileDirectories Order By entry.Value Descending Select entry)
-        Dim i As Integer = 0
-        dgFolders.Rows.Clear()
-        For Each subFolder In profileDirectoriesSorted
-            dgFolders.Rows.Add(profileDirectoriesSorted(i).Key, profileDirectoriesSorted(i).Value)
-            i = i + 1
-        Next
-        For x As Integer = 0 To dgFolders.ColumnCount - 1
-            dgFolders.Columns(x).AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
-        Next
+        If (dgFolders.CurrentCell.ColumnIndex = 0) Then
+            Dim selectedFolder As String = dgFolders.CurrentCell.Value
+            SetMouseBusy()
+            LoadFolderGrid(selectedFolder)
+            SetMouseNotBusy()
+        End If
 
     End Sub
 
-    Private Sub lblLastFolder_Click(sender As Object, e As EventArgs) Handles lblLastFolder.Click
-        Dim selectedFolder As String = Me.lblLastFolder.Text
-        Me.lblLastFolder.Text = selectedFolder
-        Dim profileDirectories As New Dictionary(Of String, Long)
-        profileDirectories = LoadProfileSizing(selectedFolder)
-        Dim profileDirectoriesSorted = (From entry In profileDirectories Order By entry.Value Descending Select entry)
-        Dim i As Integer = 0
-        dgFolders.Rows.Clear()
-        For Each subFolder In profileDirectoriesSorted
-            dgFolders.Rows.Add(profileDirectoriesSorted(i).Key, profileDirectoriesSorted(i).Value)
-            i = i + 1
-        Next
-        For x As Integer = 0 To dgFolders.ColumnCount - 1
-            dgFolders.Columns(x).AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
-        Next
+    Private Sub DeleteToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeleteToolStripMenuItem.Click
+
+        If (dgFolders.CurrentCell.ColumnIndex = 0) Then
+            Dim selectedFolder As String = dgFolders.CurrentCell.Value
+            SetMouseBusy()
+            DeleteFolder(selectedFolder)
+            LoadFolderGrid(Me.lblLastFolder.Text)
+            LoadProfileData()
+            SetMouseNotBusy()
+        End If
+
+    End Sub
+
+    Private Sub btnBack_Click(sender As Object, e As EventArgs) Handles btnBack.Click
+
+        Dim lastFolder As String = Me.lblLastFolder.Text
+        If Not (lastFolder = userProfileDirectory) Then
+            Dim trimmedFolder As String = lastFolder.Substring(0, lastFolder.LastIndexOf("\"))
+            SetMouseBusy()
+            LoadFolderGrid(trimmedFolder)
+            SetMouseNotBusy()
+        Else
+            DisplayErrorBox("You cannot roam above the root User Profile directory of " & userProfileDirectory)
+        End If
+
+
+
+    End Sub
+
+    Private Sub cmdExecute_Click(sender As Object, e As EventArgs) Handles cmdExecute.Click
+
+        Select Case Me.cmbAction.Text
+            Case "Select Action"
+                DisplayErrorBox("You must select an action to execute")
+            Case "Clear Temp Files"
+                ClearTemporaryFiles(userProfileDirectory)
+            Case "Reset Microsoft Edge"
+                ResetMicrosoftEdge(appdataLocal)
+            Case "Run Custom Scripts"
+                RunCustomScripts(Scripts, userProfileDirectory)
+        End Select
+        Me.cmbAction.Text = "Select Action"
+
+    End Sub
+
+    Private Sub btnShowProfileDetail_Click(sender As Object, e As EventArgs) Handles btnShowProfileDetail.Click
+
+        frmProfileDetail.Show()
+
     End Sub
 End Class

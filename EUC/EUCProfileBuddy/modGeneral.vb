@@ -1,5 +1,4 @@
-﻿Imports EUCProfileBuddy.modGlobal
-Module modGeneral
+﻿Module modGeneral
 
     Sub MinimizeApplication(iconNotify As NotifyIcon, currentForm As Form)
 
@@ -8,7 +7,7 @@ Module modGeneral
         iconNotify.BalloonTipTitle = userName + " (" + userProfileDirectory + ")"
         iconNotify.BalloonTipText = balloonTipText
         iconNotify.ShowBalloonTip(baloonTipTimeout)
-        iconNotify.Text = "EUC Profile Buddy: " & userName & " (" & userProfileDirectory & ")"
+        iconNotify.Text = appTitle & ": " & userName & " (" & userProfileDirectory & ")"
         currentForm.ShowInTaskbar = False
 
     End Sub
