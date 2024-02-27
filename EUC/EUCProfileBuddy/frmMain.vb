@@ -128,4 +128,5 @@ Public Class frmMain
         frmProfileDetail.Show()
 
     End Sub
+
 End Class

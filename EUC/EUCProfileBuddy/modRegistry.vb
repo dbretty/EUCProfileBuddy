@@ -56,4 +56,23 @@ Module modRegistry
 
     End Sub
 
+    Public Sub LoadProfileShellRedirectionDetails(registryRoot As String, registryLocation As String)
+
+        Dim valueDetail As String
+        Dim parentKey As RegistryKey
+
+        If registryLocation = "HKLM" Then
+            parentKey = My.Computer.Registry.LocalMachine.OpenSubKey(registryRoot)
+        Else
+            parentKey = My.Computer.Registry.CurrentUser.OpenSubKey(registryRoot)
+        End If
+
+        For Each valueName As String In parentKey.GetValueNames()
+            On Error Resume Next
+            valueDetail = parentKey.GetValue(valueName)
+            frmProfileDetail.dgShell.Rows.Add(valueName, valueDetail)
+        Next
+
+    End Sub
+
 End Module

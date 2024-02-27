@@ -23,6 +23,9 @@ Partial Class frmProfileDetail
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmProfileDetail))
+        Dim DataGridViewCellStyle1 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim DataGridViewCellStyle2 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim DataGridViewCellStyle3 As DataGridViewCellStyle = New DataGridViewCellStyle()
         Dim DataGridViewCellStyle4 As DataGridViewCellStyle = New DataGridViewCellStyle()
         Dim DataGridViewCellStyle5 As DataGridViewCellStyle = New DataGridViewCellStyle()
         Dim DataGridViewCellStyle6 As DataGridViewCellStyle = New DataGridViewCellStyle()
@@ -39,8 +42,13 @@ Partial Class frmProfileDetail
         dgProfile = New DataGridView()
         colSetting = New DataGridViewTextBoxColumn()
         colDetail = New DataGridViewTextBoxColumn()
+        dgShell = New DataGridView()
+        DataGridViewTextBoxColumn1 = New DataGridViewTextBoxColumn()
+        DataGridViewTextBoxColumn2 = New DataGridViewTextBoxColumn()
+        Label1 = New Label()
         CType(pctLogo, ComponentModel.ISupportInitialize).BeginInit()
         CType(dgProfile, ComponentModel.ISupportInitialize).BeginInit()
+        CType(dgShell, ComponentModel.ISupportInitialize).BeginInit()
         SuspendLayout()
         ' 
         ' lblTitle
@@ -152,11 +160,11 @@ Partial Class frmProfileDetail
         ' lblProfileSettings
         ' 
         lblProfileSettings.AutoSize = True
-        lblProfileSettings.Font = New Font("Segoe UI", 10F)
+        lblProfileSettings.Font = New Font("Segoe UI", 10F, FontStyle.Bold)
         lblProfileSettings.ForeColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
         lblProfileSettings.Location = New Point(6, 182)
         lblProfileSettings.Name = "lblProfileSettings"
-        lblProfileSettings.Size = New Size(92, 19)
+        lblProfileSettings.Size = New Size(103, 19)
         lblProfileSettings.TabIndex = 88
         lblProfileSettings.Text = "Profile Details"
         ' 
@@ -172,36 +180,36 @@ Partial Class frmProfileDetail
         dgProfile.BorderStyle = BorderStyle.None
         dgProfile.CellBorderStyle = DataGridViewCellBorderStyle.None
         dgProfile.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single
-        DataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle4.BackColor = SystemColors.Control
-        DataGridViewCellStyle4.Font = New Font("Segoe UI", 9F)
-        DataGridViewCellStyle4.ForeColor = SystemColors.WindowText
-        DataGridViewCellStyle4.SelectionBackColor = SystemColors.Highlight
-        DataGridViewCellStyle4.SelectionForeColor = SystemColors.HighlightText
-        DataGridViewCellStyle4.WrapMode = DataGridViewTriState.True
-        dgProfile.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle4
+        DataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle1.BackColor = SystemColors.Control
+        DataGridViewCellStyle1.Font = New Font("Segoe UI", 9F)
+        DataGridViewCellStyle1.ForeColor = SystemColors.WindowText
+        DataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight
+        DataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText
+        DataGridViewCellStyle1.WrapMode = DataGridViewTriState.True
+        dgProfile.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
         dgProfile.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
         dgProfile.ColumnHeadersVisible = False
         dgProfile.Columns.AddRange(New DataGridViewColumn() {colSetting, colDetail})
-        DataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle5.BackColor = SystemColors.Window
-        DataGridViewCellStyle5.Font = New Font("Segoe UI", 9F)
-        DataGridViewCellStyle5.ForeColor = SystemColors.ControlText
-        DataGridViewCellStyle5.SelectionBackColor = SystemColors.Highlight
-        DataGridViewCellStyle5.SelectionForeColor = SystemColors.HighlightText
-        DataGridViewCellStyle5.WrapMode = DataGridViewTriState.False
-        dgProfile.DefaultCellStyle = DataGridViewCellStyle5
-        dgProfile.Location = New Point(8, 206)
+        DataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle2.BackColor = SystemColors.Window
+        DataGridViewCellStyle2.Font = New Font("Segoe UI", 9F)
+        DataGridViewCellStyle2.ForeColor = SystemColors.ControlText
+        DataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight
+        DataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText
+        DataGridViewCellStyle2.WrapMode = DataGridViewTriState.False
+        dgProfile.DefaultCellStyle = DataGridViewCellStyle2
+        dgProfile.Location = New Point(7, 204)
         dgProfile.MultiSelect = False
         dgProfile.Name = "dgProfile"
-        DataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle6.BackColor = SystemColors.Control
-        DataGridViewCellStyle6.Font = New Font("Segoe UI", 9F)
-        DataGridViewCellStyle6.ForeColor = SystemColors.WindowText
-        DataGridViewCellStyle6.SelectionBackColor = SystemColors.Highlight
-        DataGridViewCellStyle6.SelectionForeColor = SystemColors.HighlightText
-        DataGridViewCellStyle6.WrapMode = DataGridViewTriState.True
-        dgProfile.RowHeadersDefaultCellStyle = DataGridViewCellStyle6
+        DataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle3.BackColor = SystemColors.Control
+        DataGridViewCellStyle3.Font = New Font("Segoe UI", 9F)
+        DataGridViewCellStyle3.ForeColor = SystemColors.WindowText
+        DataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight
+        DataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText
+        DataGridViewCellStyle3.WrapMode = DataGridViewTriState.True
+        dgProfile.RowHeadersDefaultCellStyle = DataGridViewCellStyle3
         dgProfile.RowHeadersVisible = False
         dgProfile.ScrollBars = ScrollBars.Vertical
         dgProfile.ShowEditingIcon = False
@@ -222,13 +230,88 @@ Partial Class frmProfileDetail
         colDetail.Name = "colDetail"
         colDetail.Width = 5
         ' 
+        ' dgShell
+        ' 
+        dgShell.AllowUserToAddRows = False
+        dgShell.AllowUserToDeleteRows = False
+        dgShell.AllowUserToResizeRows = False
+        dgShell.Anchor = AnchorStyles.None
+        dgShell.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells
+        dgShell.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells
+        dgShell.BackgroundColor = Color.White
+        dgShell.BorderStyle = BorderStyle.None
+        dgShell.CellBorderStyle = DataGridViewCellBorderStyle.None
+        dgShell.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single
+        DataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle4.BackColor = SystemColors.Control
+        DataGridViewCellStyle4.Font = New Font("Segoe UI", 9F)
+        DataGridViewCellStyle4.ForeColor = SystemColors.WindowText
+        DataGridViewCellStyle4.SelectionBackColor = SystemColors.Highlight
+        DataGridViewCellStyle4.SelectionForeColor = SystemColors.HighlightText
+        DataGridViewCellStyle4.WrapMode = DataGridViewTriState.True
+        dgShell.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle4
+        dgShell.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        dgShell.ColumnHeadersVisible = False
+        dgShell.Columns.AddRange(New DataGridViewColumn() {DataGridViewTextBoxColumn1, DataGridViewTextBoxColumn2})
+        DataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle5.BackColor = SystemColors.Window
+        DataGridViewCellStyle5.Font = New Font("Segoe UI", 9F)
+        DataGridViewCellStyle5.ForeColor = SystemColors.ControlText
+        DataGridViewCellStyle5.SelectionBackColor = SystemColors.Highlight
+        DataGridViewCellStyle5.SelectionForeColor = SystemColors.HighlightText
+        DataGridViewCellStyle5.WrapMode = DataGridViewTriState.False
+        dgShell.DefaultCellStyle = DataGridViewCellStyle5
+        dgShell.Location = New Point(7, 537)
+        dgShell.MultiSelect = False
+        dgShell.Name = "dgShell"
+        DataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle6.BackColor = SystemColors.Control
+        DataGridViewCellStyle6.Font = New Font("Segoe UI", 9F)
+        DataGridViewCellStyle6.ForeColor = SystemColors.WindowText
+        DataGridViewCellStyle6.SelectionBackColor = SystemColors.Highlight
+        DataGridViewCellStyle6.SelectionForeColor = SystemColors.HighlightText
+        DataGridViewCellStyle6.WrapMode = DataGridViewTriState.True
+        dgShell.RowHeadersDefaultCellStyle = DataGridViewCellStyle6
+        dgShell.RowHeadersVisible = False
+        dgShell.ScrollBars = ScrollBars.Vertical
+        dgShell.ShowEditingIcon = False
+        dgShell.Size = New Size(545, 229)
+        dgShell.TabIndex = 89
+        ' 
+        ' DataGridViewTextBoxColumn1
+        ' 
+        DataGridViewTextBoxColumn1.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+        DataGridViewTextBoxColumn1.HeaderText = "Setting"
+        DataGridViewTextBoxColumn1.Name = "DataGridViewTextBoxColumn1"
+        DataGridViewTextBoxColumn1.Width = 5
+        ' 
+        ' DataGridViewTextBoxColumn2
+        ' 
+        DataGridViewTextBoxColumn2.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+        DataGridViewTextBoxColumn2.HeaderText = "Detail"
+        DataGridViewTextBoxColumn2.Name = "DataGridViewTextBoxColumn2"
+        DataGridViewTextBoxColumn2.Width = 5
+        ' 
+        ' Label1
+        ' 
+        Label1.AutoSize = True
+        Label1.Font = New Font("Segoe UI", 10F, FontStyle.Bold)
+        Label1.ForeColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
+        Label1.Location = New Point(6, 515)
+        Label1.Name = "Label1"
+        Label1.Size = New Size(182, 19)
+        Label1.TabIndex = 90
+        Label1.Text = "Folder Redirection Details"
+        ' 
         ' frmProfileDetail
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
         BackColor = Color.White
-        ClientSize = New Size(559, 526)
+        ClientSize = New Size(559, 778)
         ControlBox = False
+        Controls.Add(Label1)
+        Controls.Add(dgShell)
         Controls.Add(lblProfileSettings)
         Controls.Add(dgProfile)
         Controls.Add(lblProfileType)
@@ -246,6 +329,7 @@ Partial Class frmProfileDetail
         Text = "frmProfileDetail"
         CType(pctLogo, ComponentModel.ISupportInitialize).EndInit()
         CType(dgProfile, ComponentModel.ISupportInitialize).EndInit()
+        CType(dgShell, ComponentModel.ISupportInitialize).EndInit()
         ResumeLayout(False)
         PerformLayout()
     End Sub
@@ -262,4 +346,8 @@ Partial Class frmProfileDetail
     Friend WithEvents dgProfile As DataGridView
     Friend WithEvents colSetting As DataGridViewTextBoxColumn
     Friend WithEvents colDetail As DataGridViewTextBoxColumn
+    Friend WithEvents dgShell As DataGridView
+    Friend WithEvents DataGridViewTextBoxColumn1 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn2 As DataGridViewTextBoxColumn
+    Friend WithEvents Label1 As Label
 End Class

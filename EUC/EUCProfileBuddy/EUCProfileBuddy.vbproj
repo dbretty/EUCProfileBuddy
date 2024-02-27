@@ -8,6 +8,7 @@
     <MyType>WindowsForms</MyType>
     <ApplicationIcon>EUCProfileBuddy.ico</ApplicationIcon>
     <Title>EUC Profile Buddy</Title>
+    <Version>2402.01</Version>
   </PropertyGroup>
 
   <ItemGroup>

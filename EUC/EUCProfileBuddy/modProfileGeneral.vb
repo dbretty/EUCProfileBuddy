@@ -316,6 +316,7 @@ Module modProfileGeneral
             frmProfileDetail.lblProfileSettings.Text = "Citrix Profile Management Settings"
             LoadProfileRegistryDetails("SOFTWARE\Policies\Citrix\UserProfileManager", "HKLM")
         End If
+        LoadProfileShellRedirectionDetails("Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders", "HKCU")
         frmProfileDetail.lblAppDataLocal.Text = appdataLocal
         frmProfileDetail.lblAppDataRoaming.Text = appdataRoaming
         frmProfileDetail.lblProfileType.Text = userProfileType
