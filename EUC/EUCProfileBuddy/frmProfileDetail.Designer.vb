@@ -46,6 +46,8 @@ Partial Class frmProfileDetail
         DataGridViewTextBoxColumn1 = New DataGridViewTextBoxColumn()
         DataGridViewTextBoxColumn2 = New DataGridViewTextBoxColumn()
         Label1 = New Label()
+        btnSortProfileData = New Button()
+        btnSortFolderRedirection = New Button()
         CType(pctLogo, ComponentModel.ISupportInitialize).BeginInit()
         CType(dgProfile, ComponentModel.ISupportInitialize).BeginInit()
         CType(dgShell, ComponentModel.ISupportInitialize).BeginInit()
@@ -212,7 +214,7 @@ Partial Class frmProfileDetail
         dgProfile.RowHeadersDefaultCellStyle = DataGridViewCellStyle3
         dgProfile.RowHeadersVisible = False
         dgProfile.ShowEditingIcon = False
-        dgProfile.Size = New Size(545, 308)
+        dgProfile.Size = New Size(545, 309)
         dgProfile.TabIndex = 86
         ' 
         ' colSetting
@@ -260,7 +262,7 @@ Partial Class frmProfileDetail
         DataGridViewCellStyle5.SelectionForeColor = SystemColors.HighlightText
         DataGridViewCellStyle5.WrapMode = DataGridViewTriState.False
         dgShell.DefaultCellStyle = DataGridViewCellStyle5
-        dgShell.Location = New Point(7, 537)
+        dgShell.Location = New Point(8, 548)
         dgShell.MultiSelect = False
         dgShell.Name = "dgShell"
         DataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft
@@ -295,11 +297,41 @@ Partial Class frmProfileDetail
         Label1.AutoSize = True
         Label1.Font = New Font("Segoe UI", 10F, FontStyle.Bold)
         Label1.ForeColor = Color.FromArgb(CByte(64), CByte(64), CByte(64))
-        Label1.Location = New Point(6, 515)
+        Label1.Location = New Point(6, 526)
         Label1.Name = "Label1"
         Label1.Size = New Size(182, 19)
         Label1.TabIndex = 90
         Label1.Text = "Folder Redirection Details"
+        ' 
+        ' btnSortProfileData
+        ' 
+        btnSortProfileData.BackColor = Color.White
+        btnSortProfileData.FlatAppearance.BorderColor = Color.SteelBlue
+        btnSortProfileData.FlatAppearance.BorderSize = 2
+        btnSortProfileData.FlatStyle = FlatStyle.Flat
+        btnSortProfileData.Font = New Font("Segoe UI", 8F)
+        btnSortProfileData.Location = New Point(432, 172)
+        btnSortProfileData.Margin = New Padding(0)
+        btnSortProfileData.Name = "btnSortProfileData"
+        btnSortProfileData.Size = New Size(121, 27)
+        btnSortProfileData.TabIndex = 91
+        btnSortProfileData.Text = "Ascending"
+        btnSortProfileData.UseVisualStyleBackColor = False
+        ' 
+        ' btnSortFolderRedirection
+        ' 
+        btnSortFolderRedirection.BackColor = Color.White
+        btnSortFolderRedirection.FlatAppearance.BorderColor = Color.SteelBlue
+        btnSortFolderRedirection.FlatAppearance.BorderSize = 2
+        btnSortFolderRedirection.FlatStyle = FlatStyle.Flat
+        btnSortFolderRedirection.Font = New Font("Segoe UI", 8F)
+        btnSortFolderRedirection.Location = New Point(432, 516)
+        btnSortFolderRedirection.Margin = New Padding(0)
+        btnSortFolderRedirection.Name = "btnSortFolderRedirection"
+        btnSortFolderRedirection.Size = New Size(121, 27)
+        btnSortFolderRedirection.TabIndex = 92
+        btnSortFolderRedirection.Text = "Ascending"
+        btnSortFolderRedirection.UseVisualStyleBackColor = False
         ' 
         ' frmProfileDetail
         ' 
@@ -308,6 +340,8 @@ Partial Class frmProfileDetail
         BackColor = Color.White
         ClientSize = New Size(559, 744)
         ControlBox = False
+        Controls.Add(btnSortFolderRedirection)
+        Controls.Add(btnSortProfileData)
         Controls.Add(Label1)
         Controls.Add(dgShell)
         Controls.Add(lblProfileSettings)
@@ -348,4 +382,6 @@ Partial Class frmProfileDetail
     Friend WithEvents DataGridViewTextBoxColumn1 As DataGridViewTextBoxColumn
     Friend WithEvents DataGridViewTextBoxColumn2 As DataGridViewTextBoxColumn
     Friend WithEvents Label1 As Label
+    Friend WithEvents btnSortProfileData As Button
+    Friend WithEvents btnSortFolderRedirection As Button
 End Class
