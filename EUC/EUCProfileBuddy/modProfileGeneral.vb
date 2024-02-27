@@ -196,13 +196,11 @@ Module modProfileGeneral
 
     End Sub
 
-    Public Sub ClearTemporaryFiles(userProfileDirectory As String)
+    Public Sub ClearTemporaryFiles(userProfileDirectory As String, Optional silentMode As Boolean = False)
 
         Dim tempPath As String
 
-        If (DisplayYesNoBox("Are you sure you want to clear yout TEMP data?") = vbYes) Then
-            SetMouseBusy()
-
+        If silentMode = True Then
             For Each tempFolder As String In Directories
                 tempPath = userProfileDirectory & "\" & tempFolder
                 Try
@@ -220,17 +218,41 @@ Module modProfileGeneral
                     ' Code here to handle errors
                 End Try
             Next
+        Else
+            If (DisplayYesNoBox("Are you sure you want to clear yout TEMP data?") = vbYes) Then
 
-            LoadProfileData()
-            LoadFolderGrid(userProfileDirectory)
-            SetMouseNotBusy()
-            DisplayInformationBox("Temporary Files Deleted")
+                SetMouseBusy()
 
+                For Each tempFolder As String In Directories
+                    tempPath = userProfileDirectory & "\" & tempFolder
+                    Try
+                        System.IO.Directory.Delete(tempPath, True)
+                    Catch ex As Exception
+                        ' Code here to handle errors
+                    End Try
+                Next
+
+                For Each tempFile As String In Files
+                    tempPath = userProfileDirectory & "\" & tempFile
+                    Try
+                        System.IO.Directory.Delete(tempPath, True)
+                    Catch ex As Exception
+                        ' Code here to handle errors
+                    End Try
+                Next
+
+                LoadProfileData()
+                LoadFolderGrid(userProfileDirectory)
+                SetMouseNotBusy()
+                DisplayInformationBox("Temporary Files Deleted")
+
+            End If
         End If
+
 
     End Sub
 
-    Public Sub RunCustomScripts(Scripts As String(), userProfileDirectory As String)
+    Public Sub RunCustomScripts(Scripts As String(), userProfileDirectory As String, Optional silentMode As Boolean = False)
 
         Dim messageText As String = "Are you sure you want to run the following custom scripts?" & vbCrLf & vbCrLf
         Dim allScriptsFound As Boolean = True
@@ -241,25 +263,35 @@ Module modProfileGeneral
             If My.Computer.FileSystem.FileExists(scriptFile) = True Then
                 messageText = messageText & scriptFile & vbCrLf
             Else
-                DisplayErrorBox("Script File Missing! " & scriptFile & " was not found, please ensure it exists before executing")
+                If silentMode = False Then
+                    DisplayErrorBox("Script File Missing! " & scriptFile & " was not found, please ensure it exists before executing")
+                End If
                 allScriptsFound = False
                 Exit For
             End If
         Next
 
         If allScriptsFound = True Then
-            If (DisplayYesNoBox(messageText) = vbYes) Then
-                SetMouseBusy()
+            If silentMode = True Then
                 For Each script In Scripts
                     scriptFile = userProfileDirectory & "\AppData\Local\EUCProfileBuddy\" & script
                     Dim args As String = "-executionpolicy bypass -File " & scriptFile
                     Process.Start("powershell.exe", args)
                 Next
-                LoadProfileData()
-                LoadFolderGrid(userProfileDirectory)
-                SetMouseNotBusy()
-                DisplayInformationBox("Custom Scripts executed")
+            Else
+                If (DisplayYesNoBox(messageText) = vbYes) Then
+                    SetMouseBusy()
+                    For Each script In Scripts
+                        scriptFile = userProfileDirectory & "\AppData\Local\EUCProfileBuddy\" & script
+                        Dim args As String = "-executionpolicy bypass -File " & scriptFile
+                        Process.Start("powershell.exe", args)
+                    Next
+                    LoadProfileData()
+                    LoadFolderGrid(userProfileDirectory)
+                    SetMouseNotBusy()
+                    DisplayInformationBox("Custom Scripts executed")
 
+                End If
             End If
         End If
 
@@ -267,8 +299,26 @@ Module modProfileGeneral
 
     Public Sub LoadProfileDetails()
 
+        userProfileType = ProfileType()
+        frmProfileDetail.dgProfile.Rows.Clear()
+        If userProfileType = "Microsoft FSLogix" Then
+            frmProfileDetail.lblProfileSettings.Text = "FSLogix Profile Settings"
+            LoadProfileRegistryDetails("SOFTWARE\FSLogix\Profiles", "HKLM")
+            LoadProfileRegistryDetails("SOFTWARE\FSLogix\Apps", "HKLM")
+            LoadProfileRegistryDetails("SOFTWARE\FSLogix\Logging", "HKLM")
+            LoadProfileRegistryDetails("SOFTWARE\Policies\FSLogix\ODFC", "HKLM")
+        End If
+        If userProfileType = "Local" Then
+            frmProfileDetail.lblProfileSettings.Text = "Local Profile Settings"
+            LoadProfileRegistryDetails("Volatile Environment", "HKCU")
+        End If
+        If userProfileType = "Citrix Profile Management" Then
+            frmProfileDetail.lblProfileSettings.Text = "Citrix Profile Management Settings"
+            LoadProfileRegistryDetails("SOFTWARE\Policies\Citrix\UserProfileManager", "HKLM")
+        End If
         frmProfileDetail.lblAppDataLocal.Text = appdataLocal
         frmProfileDetail.lblAppDataRoaming.Text = appdataRoaming
+        frmProfileDetail.lblProfileType.Text = userProfileType
 
     End Sub
 

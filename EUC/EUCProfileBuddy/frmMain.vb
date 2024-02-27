@@ -4,6 +4,7 @@ Imports System.Windows.Forms.VisualStyles.VisualStyleElement
 Imports System.Xml
 
 Public Class frmMain
+
     Private Sub frmMain_Resize(sender As Object, e As EventArgs) Handles Me.Resize
 
         If Me.WindowState = FormWindowState.Minimized Then
@@ -20,12 +21,31 @@ Public Class frmMain
 
     Private Sub frmMain_Load(sender As Object, e As EventArgs) Handles Me.Load
 
-        SetMouseBusy()
-        LoadProfileData()
-        LoadFolderGrid(userProfileDirectory)
-        SetMouseNotBusy()
+        Dim commandLineArgs() As String = Environment.GetCommandLineArgs
+        Dim sanitizedCommand As String
 
-        Me.Location = New Point(Screen.PrimaryScreen.WorkingArea.Width - Me.Width, Screen.PrimaryScreen.WorkingArea.Height - Me.Height)
+        If commandLineArgs.Count > 1 Then
+            LoadProfileData()
+            For Each commandLine In commandLineArgs
+                sanitizedCommand = LCase(commandLine)
+                Select Case sanitizedCommand
+                    Case "/cleartemp"
+                        ClearTemporaryFiles(userProfileDirectory, True)
+                    Case "/customscripts"
+                        RunCustomScripts(Scripts, userProfileDirectory, True)
+                End Select
+            Next
+            Application.Exit()
+        Else
+            SetMouseBusy()
+            LoadProfileData()
+            LoadFolderGrid(userProfileDirectory)
+            SetMouseNotBusy()
+
+            Me.Location = New Point(Screen.PrimaryScreen.WorkingArea.Width - Me.Width, Screen.PrimaryScreen.WorkingArea.Height - Me.Height)
+            Me.WindowState = FormWindowState.Minimized
+        End If
+
 
     End Sub
 
@@ -93,11 +113,11 @@ Public Class frmMain
             Case "Select Action"
                 DisplayErrorBox("You must select an action to execute")
             Case "Clear Temp Files"
-                ClearTemporaryFiles(userProfileDirectory)
+                ClearTemporaryFiles(userProfileDirectory, False)
             Case "Reset Microsoft Edge"
                 ResetMicrosoftEdge(appdataLocal)
             Case "Run Custom Scripts"
-                RunCustomScripts(Scripts, userProfileDirectory)
+                RunCustomScripts(Scripts, userProfileDirectory, False)
         End Select
         Me.cmbAction.Text = "Select Action"
 

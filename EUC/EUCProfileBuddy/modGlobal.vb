@@ -13,6 +13,7 @@
     Public currentProfileSize As Integer
     Public appdataLocal As String
     Public appdataRoaming As String
+    Public userProfileType As String
 
     ' Global Variables for Temp Data Locations
     Public tempData As String() = {
