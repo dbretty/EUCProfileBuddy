@@ -199,7 +199,7 @@ Partial Class frmProfileDetail
         DataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText
         DataGridViewCellStyle2.WrapMode = DataGridViewTriState.False
         dgProfile.DefaultCellStyle = DataGridViewCellStyle2
-        dgProfile.Location = New Point(7, 204)
+        dgProfile.Location = New Point(6, 204)
         dgProfile.MultiSelect = False
         dgProfile.Name = "dgProfile"
         DataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft
@@ -211,7 +211,6 @@ Partial Class frmProfileDetail
         DataGridViewCellStyle3.WrapMode = DataGridViewTriState.True
         dgProfile.RowHeadersDefaultCellStyle = DataGridViewCellStyle3
         dgProfile.RowHeadersVisible = False
-        dgProfile.ScrollBars = ScrollBars.Vertical
         dgProfile.ShowEditingIcon = False
         dgProfile.Size = New Size(545, 308)
         dgProfile.TabIndex = 86
@@ -273,9 +272,8 @@ Partial Class frmProfileDetail
         DataGridViewCellStyle6.WrapMode = DataGridViewTriState.True
         dgShell.RowHeadersDefaultCellStyle = DataGridViewCellStyle6
         dgShell.RowHeadersVisible = False
-        dgShell.ScrollBars = ScrollBars.Vertical
         dgShell.ShowEditingIcon = False
-        dgShell.Size = New Size(545, 229)
+        dgShell.Size = New Size(545, 190)
         dgShell.TabIndex = 89
         ' 
         ' DataGridViewTextBoxColumn1
@@ -308,7 +306,7 @@ Partial Class frmProfileDetail
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
         BackColor = Color.White
-        ClientSize = New Size(559, 778)
+        ClientSize = New Size(559, 744)
         ControlBox = False
         Controls.Add(Label1)
         Controls.Add(dgShell)

@@ -244,7 +244,6 @@ Partial Class frmMain
         DataGridViewCellStyle3.WrapMode = DataGridViewTriState.True
         dgFolders.RowHeadersDefaultCellStyle = DataGridViewCellStyle3
         dgFolders.RowHeadersVisible = False
-        dgFolders.ScrollBars = ScrollBars.Vertical
         dgFolders.ShowEditingIcon = False
         dgFolders.Size = New Size(545, 232)
         dgFolders.TabIndex = 79
